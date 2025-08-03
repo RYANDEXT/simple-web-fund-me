@@ -34,7 +34,7 @@ async function fund() {
         publicClient = createPublicClient({
             transport: custom(window.ethereum)
         });
-        await publicClient.simulateContract({
+        const {request} = await publicClient.simulateContract({
             address: contractAddress,
             abi: coffeeAbi,
             functionName: 'fund',
@@ -42,6 +42,8 @@ async function fund() {
             chain: currentChain,
             value: parseEther(ethAmount),
         });
+        const hash = await walletClient.writeContract(request);
+        console.log(`Transaction hash: ${hash}`);
     }else {
         connectButton.innerHTML = "Please install MetaMask!";
     }
